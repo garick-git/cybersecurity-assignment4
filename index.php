@@ -72,34 +72,83 @@
     </div>
     <p>
     <?php
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['g-recaptcha-response'])) {
-            // The reCAPTCHA has been solved
-            // Proceed with your logic here
-            // Get username and password from form submission
-            $username = $_POST["username"];
-            $password = md5($_POST["password"]);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Check if the reCAPTCHA response exists
+            if (isset($_POST['g-recaptcha-response'])) {
+                // The reCAPTCHA has been solved
+                // Proceed with your logic here
+                // Get the reCAPTCHA response
+                $recaptchaResponse = $_POST['g-recaptcha-response'];
 
-            // Connect to MySQL database
-            $conn = mysqli_connect("localhost", "root", "COSC4343", "cybersecurity_homework4");
+                // Secret key for reCAPTCHA verification (replace YOUR_SECRET_KEY with your actual secret key)
+                $recaptchaSecretKey = "6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw";
 
-            // Check connection
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
+                // IP address of the user (optional)
+                $remoteIp = $_SERVER['REMOTE_ADDR'];
 
-            // Query to check if the user exists in the database
-            $sql = "SELECT * FROM UserAccounts WHERE username = '$username' AND password = '$password'";
-            $result = mysqli_query($conn, $sql);
+                // URL to verify the reCAPTCHA response
+                $recaptchaVerifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
+                
+                // Build the POST request to verify the reCAPTCHA response
+                $recaptchaRequestData = [
+                    'secret' => $recaptchaSecretKey,
+                    'response' => $recaptchaResponse,
+                    'remoteip' => $remoteIp
+                ];
 
-            // Check if any rows were returned
-            if (mysqli_num_rows($result) > 0) {
-                echo "User exists: true";
+                // Initialize cURL session
+                $curl = curl_init($recaptchaVerifyUrl);
+                
+                // Set cURL options
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($recaptchaRequestData));
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+                // Execute the cURL request
+                $recaptchaResponseData = curl_exec($curl);
+
+                // Close cURL session
+                curl_close($curl);
+
+                // Decode the JSON response
+                $recaptchaResponseData = json_decode($recaptchaResponseData);
+
+                // Check if reCAPTCHA verification was successful
+                if ($recaptchaResponseData->success) {
+                    // reCAPTCHA verification passed
+                    // Proceed with checking user existence in the database
+                    $username = $_POST["username"];
+                    $password = md5($_POST["password"]);
+
+                    // Connect to MySQL database
+                    $conn = mysqli_connect("localhost", "root", "COSC4343", "cybersecurity_homework4");
+
+                    // Check connection
+                    if (!$conn) {
+                        die("Connection failed: " . mysqli_connect_error());
+                    }
+
+                    // Query to check if the user exists in the database
+                    $sql = "SELECT * FROM UserAccounts WHERE username = '$username' AND password = '$password'";
+                    $result = mysqli_query($conn, $sql);
+
+                    // Check if any rows were returned
+                    if (mysqli_num_rows($result) > 0) {
+                        echo "User exists: true";
+                    } else {
+                        echo "User exists: false";
+                    }
+
+                    // Close database connection
+                    mysqli_close($conn);
+                } else {
+                    // reCAPTCHA verification failed
+                    echo "reCAPTCHA verification failed.";
+                }
             } else {
-                echo "User exists: false";
+                // The reCAPTCHA response is missing
+                echo "Please solve the reCAPTCHA.";
             }
-
-            // Close database connection
-            mysqli_close($conn);
         }
         ?>
     </p>
