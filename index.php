@@ -71,6 +71,7 @@
     <p>
         <?php
             $str = "Hello World";
+            echo $str;
             echo md5($str);
         ?>
     </p>
