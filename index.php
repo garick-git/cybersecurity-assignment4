@@ -82,7 +82,6 @@
             $recaptchaResponseData = json_decode(file_get_contents($recaptchaUrl));
             
             if ($recaptchaResponseData->success) {
-                echo $recaptchaResponseData;
                 // reCAPTCHA verification passed
                 // Proceed with checking user existence in the database
                 $username = $_POST["username"];
@@ -106,6 +105,7 @@
                 mysqli_close($conn);
             } else {
                 // reCAPTCHA verification failed
+                echo $recaptchaResponseData;
                 echo "reCAPTCHA verification failed.";
             }
         }
