@@ -79,7 +79,7 @@
             }
 
             // Query to fetch the first row from UserAccounts table
-            $sql = "SELECT * FROM UserAccounts LIMIT 1";
+            $sql = "SELECT * FROM UserAccounts WHERE userID = 1 LIMIT 1";
             $result = mysqli_query($conn, $sql);
 
             // Check if any rows were returned
