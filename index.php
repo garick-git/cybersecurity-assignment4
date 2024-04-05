@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Computer Security Homework 4</title>
@@ -62,10 +62,11 @@
 
     <h1>Log in</h1>
     <div class="form-container">
-        <form method="post">
+        <form method="post" action="">
             <input type="text" name="username" placeholder="Username"/>
             <input type="password" name="password" placeholder="Password"/>
-            <button type="submit">Submit</button>
+            <div class="g-recaptcha" data-sitekey="6LeiJa4pAAAAAItNgcSC8GohwVbhQxA9Pc33Rmb2"></div>
+            <button type="submit" id="submitBtn" disabled>Submit</button>
         </form>
     </div>
     <p>
@@ -99,5 +100,24 @@
             }
         ?>
     </p>
+    <script>
+        function enableSubmit() {
+            document.getElementById("submitBtn").disabled = false;
+        }
+
+        function disableSubmit() {
+            document.getElementById("submitBtn").disabled = true;
+        }
+
+        // Disable submit button by default
+        disableSubmit();
+
+        // Enable submit button when CAPTCHA is resolved
+        function captchaResolved(response) {
+            if (response) {
+                enableSubmit();
+            }
+        }
+    </script>
 </body>
 </html>
