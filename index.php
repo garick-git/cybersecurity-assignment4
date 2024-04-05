@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LeiJa4pAAAAAItNgcSC8GohwVbhQxA9Pc33Rmb2"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Computer Security Homework 4</title>
@@ -65,50 +65,35 @@
         <form id="login-form" method="post" action="">
             <input type="text" name="username" placeholder="Username"/>
             <input type="password" name="password" placeholder="Password"/>
-            <button class="g-recaptcha"
-                data-sitekey="6LeiJa4pAAAAAItNgcSC8GohwVbhQxA9Pc33Rmb2"
-                data-callback='onSubmit'
-                data-action='submit'>
-                Submit
-            </button>
+            <!-- Add the reCAPTCHA v2 widget -->
+            <div class="g-recaptcha" data-sitekey="6LeiJa4pAAAAAItNgcSC8GohwVbhQxA9Pc33Rmb2"></div>
+            <button type="submit">Submit</button>
         </form>
     </div>
-    <p>
-        <?php
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // Get username and password from form submission
-                $username = $_POST["username"];
-                $password = md5($_POST["password"]);
 
-                // Connect to MySQL database
-                $conn = mysqli_connect("localhost", "root", "COSC4343", "cybersecurity_homework4");
-
-                // Check connection
-                if (!$conn) {
-                    die("Connection failed: " . mysqli_connect_error());
-                }
-
-                // Query to check if the user exists in the database
-                $sql = "SELECT * FROM UserAccounts WHERE username = '$username' AND password = '$password'";
-                $result = mysqli_query($conn, $sql);
-
-                // Check if any rows were returned
-                if (mysqli_num_rows($result) > 0) {
-                    echo "User exists: true";
-                } else {
-                    echo "User exists: false";
-                }
-
-                // Close database connection
-                mysqli_close($conn);
-            }
-        ?>
-    </p>
-    <!-- Replace the variables below. -->
     <script>
-        function onSubmit(token) {
-            document.getElementById("login-form").submit();
+        // Add a check function to enable/disable the submit button based on CAPTCHA response
+        function enableSubmit() {
+            document.querySelector('button[type="submit"]').disabled = false;
         }
+
+        function disableSubmit() {
+            document.querySelector('button[type="submit"]').disabled = true;
+        }
+
+        // Disable submit button by default
+        disableSubmit();
+
+        // Add an event listener to check CAPTCHA response
+        document.getElementById("login-form").addEventListener("submit", function(event) {
+            var response = grecaptcha.getResponse();
+            if(response.length == 0) {
+                // CAPTCHA not solved, prevent form submission
+                event.preventDefault();
+                alert("Please solve the CAPTCHA.");
+            }
+        });
     </script>
+
 </body>
 </html>
