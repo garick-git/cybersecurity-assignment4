@@ -67,23 +67,51 @@
             <input type="password" name="password" placeholder="Password"/>
             <!-- Add the reCAPTCHA v2 Checkbox widget -->
             <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw"></div>
-            <button type="submit">Submit</button>
+            <button type="submit" id="submit-btn" disabled>Submit</button>
         </form>
     </div>
 
+    <p>
+        <?php
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // Check if reCAPTCHA was solved
+                $recaptchaSecretKey = "6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw";
+                $recaptchaResponse = $_POST['g-recaptcha-response'];
+                $remoteIp = $_SERVER['REMOTE_ADDR'];
+                $recaptchaUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' . $recaptchaSecretKey . '&response=' . $recaptchaResponse . '&remoteip=' . $remoteIp;
+                $recaptchaResponseData = json_decode(file_get_contents($recaptchaUrl));
+                
+                if ($recaptchaResponseData->success) {
+                    // reCAPTCHA verification passed
+                    // Proceed with checking user existence in the database
+                    $username = $_POST["username"];
+                    $password = md5($_POST["password"]);
+
+                    $conn = mysqli_connect("localhost", "root", "COSC4343", "cybersecurity_homework4");
+
+                    if (!$conn) {
+                        die("Connection failed: " . mysqli_connect_error());
+                    }
+
+                    $sql = "SELECT * FROM UserAccounts WHERE username = '$username' AND password = '$password'";
+                    $result = mysqli_query($conn, $sql);
+
+                    if (mysqli_num_rows($result) > 0) {
+                        echo "User exists: true";
+                    } else {
+                        echo "User exists: false";
+                    }
+
+                    mysqli_close($conn);
+                } else {
+                    // reCAPTCHA verification failed
+                    echo "reCAPTCHA verification failed.";
+                }
+            }
+        ?>
+    </p>
+
     <script>
-        // Add a check function to enable/disable the submit button based on CAPTCHA response
-        function enableSubmit() {
-            document.querySelector('button[type="submit"]').disabled = false;
-        }
-
-        function disableSubmit() {
-            document.querySelector('button[type="submit"]').disabled = true;
-        }
-
-        // Disable submit button by default
-        disableSubmit();
-
         // Add an event listener to check CAPTCHA response
         document.getElementById("login-form").addEventListener("submit", function(event) {
             var response = grecaptcha.getResponse();
@@ -93,6 +121,16 @@
                 alert("Please check the box to prove that you're not a robot.");
             }
         });
+
+        // Enable submit button if CAPTCHA solved
+        function enableSubmit() {
+            document.getElementById("submit-btn").disabled = false;
+        }
+
+        // Callback function for CAPTCHA
+        function onSubmit(token) {
+            enableSubmit();
+        }
     </script>
 
 </body>
