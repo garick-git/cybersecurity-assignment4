@@ -72,43 +72,44 @@
     </div>
 
     <p>
-        <?php
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // Check if reCAPTCHA was solved
-                $recaptchaSecretKey = "6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw";
-                $recaptchaResponse = $_POST['g-recaptcha-response'];
-                $remoteIp = $_SERVER['REMOTE_ADDR'];
-                $recaptchaUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' . $recaptchaSecretKey . '&response=' . $recaptchaResponse . '&remoteip=' . $remoteIp;
-                $recaptchaResponseData = json_decode(file_get_contents($recaptchaUrl));
-                
-                if ($recaptchaResponseData->success) {
-                    // reCAPTCHA verification passed
-                    // Proceed with checking user existence in the database
-                    $username = $_POST["username"];
-                    $password = md5($_POST["password"]);
+    <?php
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['g-recaptcha-response'])) {
+            // Check if reCAPTCHA was solved
+            $recaptchaSecretKey = "6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw";
+            $recaptchaResponse = $_POST['g-recaptcha-response'];
+            $remoteIp = $_SERVER['REMOTE_ADDR'];
+            $recaptchaUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' . $recaptchaSecretKey . '&response=' . $recaptchaResponse . '&remoteip=' . $remoteIp;
+            $recaptchaResponseData = json_decode(file_get_contents($recaptchaUrl));
+            
+            if ($recaptchaResponseData->success) {
+                // reCAPTCHA verification passed
+                // Proceed with checking user existence in the database
+                $username = $_POST["username"];
+                $password = md5($_POST["password"]);
 
-                    $conn = mysqli_connect("localhost", "root", "COSC4343", "cybersecurity_homework4");
+                $conn = mysqli_connect("localhost", "root", "COSC4343", "cybersecurity_homework4");
 
-                    if (!$conn) {
-                        die("Connection failed: " . mysqli_connect_error());
-                    }
-
-                    $sql = "SELECT * FROM UserAccounts WHERE username = '$username' AND password = '$password'";
-                    $result = mysqli_query($conn, $sql);
-
-                    if (mysqli_num_rows($result) > 0) {
-                        echo "User exists: true";
-                    } else {
-                        echo "User exists: false";
-                    }
-
-                    mysqli_close($conn);
-                } else {
-                    // reCAPTCHA verification failed
-                    echo "reCAPTCHA verification failed.";
+                if (!$conn) {
+                    die("Connection failed: " . mysqli_connect_error());
                 }
+
+                $sql = "SELECT * FROM UserAccounts WHERE username = '$username' AND password = '$password'";
+                $result = mysqli_query($conn, $sql);
+
+                if (mysqli_num_rows($result) > 0) {
+                    echo "User exists: true";
+                } else {
+                    echo "User exists: false";
+                }
+
+                mysqli_close($conn);
+            } else {
+                // reCAPTCHA verification failed
+                echo "reCAPTCHA verification failed.";
             }
-        ?>
+        }
+    ?>
+
     </p>
 
     <script>
