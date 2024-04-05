@@ -65,8 +65,8 @@
         <form id="login-form" method="post" action="">
             <input type="text" name="username" placeholder="Username"/>
             <input type="password" name="password" placeholder="Password"/>
-            <!-- Add the reCAPTCHA v2 widget -->
-            <div class="g-recaptcha" data-sitekey="6LeiJa4pAAAAAItNgcSC8GohwVbhQxA9Pc33Rmb2"></div>
+            <!-- Add the reCAPTCHA v2 Checkbox widget -->
+            <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw"></div>
             <button type="submit">Submit</button>
         </form>
     </div>
@@ -90,7 +90,7 @@
             if(response.length == 0) {
                 // CAPTCHA not solved, prevent form submission
                 event.preventDefault();
-                alert("Please solve the CAPTCHA.");
+                alert("Please check the box to prove that you're not a robot.");
             }
         });
     </script>
