@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,63 +63,43 @@
 
     <h1>Log in</h1>
     <div class="form-container">
-        <form id="login-form" method="post" action="">
+        <form method="post">
             <input type="text" name="username" placeholder="Username"/>
             <input type="password" name="password" placeholder="Password"/>
-            <!-- Add the reCAPTCHA v2 Checkbox widget -->
             <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw" data-callback="onSubmit"></div>
-            <button type="submit" id="submit-btn" disabled>Submit</button>
+            <button type="submit">Submit</button>
         </form>
     </div>
-
     <p>
-    <?php
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['g-recaptcha-response'])) {
-            // Check if reCAPTCHA was solved
-            $recaptchaSecretKey = "6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw";
-            $recaptchaResponse = $_POST['g-recaptcha-response'];
-            $remoteIp = $_SERVER['REMOTE_ADDR'];
-            $recaptchaUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' . $recaptchaSecretKey . '&response=' . $recaptchaResponse . '&remoteip=' . $remoteIp;
-            $recaptchaResponseData = json_decode(file_get_contents($recaptchaUrl));
-            
-            if ($recaptchaResponseData->success) {
-                // reCAPTCHA verification passed
-                // Proceed with checking user existence in the database
+        <?php
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // Get username and password from form submission
                 $username = $_POST["username"];
                 $password = md5($_POST["password"]);
 
+                // Connect to MySQL database
                 $conn = mysqli_connect("localhost", "root", "COSC4343", "cybersecurity_homework4");
 
+                // Check connection
                 if (!$conn) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
 
+                // Query to check if the user exists in the database
                 $sql = "SELECT * FROM UserAccounts WHERE username = '$username' AND password = '$password'";
                 $result = mysqli_query($conn, $sql);
 
+                // Check if any rows were returned
                 if (mysqli_num_rows($result) > 0) {
                     echo "User exists: true";
                 } else {
                     echo "User exists: false";
                 }
 
+                // Close database connection
                 mysqli_close($conn);
-            } else {
-                // reCAPTCHA verification failed
-                echo $recaptchaResponseData;
-                echo "reCAPTCHA verification failed.";
             }
-        }
-    ?>
-
+        ?>
     </p>
-
-    <script>
-        // Callback function for CAPTCHA
-        function onSubmit(token) {
-            document.getElementById("submit-btn").disabled = false;
-        }
-    </script>
-
 </body>
 </html>
