@@ -62,39 +62,41 @@
 
     <h1>Log in</h1>
     <div class="form-container">
-        <form>
-            <input placeholder="Username"/>
-            <input type="password" placeholder="Password"/>
+        <form method="post">
+            <input type="text" name="username" placeholder="Username"/>
+            <input type="password" name="password" placeholder="Password"/>
             <button type="submit">Submit</button>
         </form>
     </div>
     <p>
         <?php
-            // Connect to MySQL database
-            $conn = mysqli_connect("localhost", "root", "COSC4343", "cybersecurity_homework4");
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // Get username and password from form submission
+                $username = $_POST["username"];
+                $password = md5($_POST["password"]);
 
-            // Check connection
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
+                // Connect to MySQL database
+                $conn = mysqli_connect("localhost", "root", "COSC4343", "cybersecurity_homework4");
+
+                // Check connection
+                if (!$conn) {
+                    die("Connection failed: " . mysqli_connect_error());
+                }
+
+                // Query to check if the user exists in the database
+                $sql = "SELECT * FROM UserAccounts WHERE username = '$username' AND password = '$password'";
+                $result = mysqli_query($conn, $sql);
+
+                // Check if any rows were returned
+                if (mysqli_num_rows($result) > 0) {
+                    echo "User exists: true";
+                } else {
+                    echo "User exists: false";
+                }
+
+                // Close database connection
+                mysqli_close($conn);
             }
-
-            // Query to fetch the first row from UserAccounts table
-            $sql = "SELECT * FROM UserAccounts WHERE userID = 1 LIMIT 1";
-            $result = mysqli_query($conn, $sql);
-
-            // Check if any rows were returned
-            if (mysqli_num_rows($result) > 0) {
-                // Output data of the first row
-                $row = mysqli_fetch_assoc($result);
-                echo "Username: " . $row["username"]. "<br>";
-                echo "Password: " . $row["password"]. "<br>";
-                echo "Clearance: " . $row["clearance"]. "<br>";
-            } else {
-                echo "0 results";
-            }
-
-            // Close database connection
-            mysqli_close($conn);
         ?>
     </p>
 </body>
