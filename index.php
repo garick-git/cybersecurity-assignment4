@@ -67,7 +67,7 @@
             <input type="password" name="password" placeholder="Password"/>
             <!-- Add the reCAPTCHA v2 Checkbox widget -->
             <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw" data-callback="onSubmit"></div>
-            <button type="submit" id="submit-btn">Submit</button>
+            <button type="submit" id="submit-btn" disabled>Submit</button>
         </form>
     </div>
 
@@ -111,6 +111,13 @@
     ?>
 
     </p>
+
+    <script>
+        // Callback function for CAPTCHA
+        function onSubmit(token) {
+            document.getElementById("submit-btn").disabled = false;
+        }
+    </script>
 
 </body>
 </html>
