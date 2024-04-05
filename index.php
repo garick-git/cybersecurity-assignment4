@@ -66,7 +66,7 @@
             <input type="text" name="username" placeholder="Username"/>
             <input type="password" name="password" placeholder="Password"/>
             <!-- Add the reCAPTCHA v2 Checkbox widget -->
-            <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw"></div>
+            <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw" data-callback="onSubmit"></div>
             <button type="submit" id="submit-btn" disabled>Submit</button>
         </form>
     </div>
@@ -112,24 +112,9 @@
     </p>
 
     <script>
-        // Add an event listener to check CAPTCHA response
-        document.getElementById("login-form").addEventListener("submit", function(event) {
-            var response = grecaptcha.getResponse();
-            if(response.length == 0) {
-                // CAPTCHA not solved, prevent form submission
-                event.preventDefault();
-                alert("Please check the box to prove that you're not a robot.");
-            }
-        });
-
-        // Enable submit button if CAPTCHA solved
-        function enableSubmit() {
-            document.getElementById("submit-btn").disabled = false;
-        }
-
         // Callback function for CAPTCHA
         function onSubmit(token) {
-            enableSubmit();
+            document.getElementById("submit-btn").disabled = false;
         }
     </script>
 
