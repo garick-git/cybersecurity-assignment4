@@ -33,7 +33,7 @@
             width: full;
         }
 
-        input, button {
+        input {
             margin: 10px;
             padding: 10px;
             border: 1px solid #ccc;
@@ -41,6 +41,28 @@
             width: 200px;
             transition: transform 500ms;
             width: 70%;
+        }
+
+        .enabled-button{
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+            transition: transform 500ms;
+            width: 70%;
+            cursor: pointer;
+        }
+
+        .disabled-button{
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+            width: 70%;
+            background-color: gray;
+            color: black;
         }
 
         input:hover, button:hover{
@@ -66,9 +88,9 @@
         <form method="post">
             <input type="text" name="username" placeholder="Username"/>
             <input type="password" name="password" placeholder="Password"/>
-            <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw" data-callback="onSubmit"></div>
+            <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw" data-callback="displaySubmitButton"></div>
             <br/>
-            <input type="submit" value="Submit">
+            <button value="Log In" id="login-button" class="disabled-button" disabled>
         </form>
     </div>
     <p>
@@ -127,9 +149,12 @@
         ?>
     </p>
     <script>
-        // Define the onSubmit function
-        function onSubmit(token) {
-            console.log('form submitted ',token)
+        // Allow user to submit form
+        function displaySubmitButton(token) {
+            console.log('reCAPTCHA completed!')
+            document.getElementById("login-button").disabled = false;
+            document.getElementById("login-button").classList.remove("disabled-button")
+            document.getElementById("login-button").classList.add("enabled-button")
         }
     </script>
 </body>
