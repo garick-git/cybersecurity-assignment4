@@ -63,11 +63,12 @@
 
     <h1>Log in</h1>
     <div class="form-container">
-        <form method="post">
+        <form action="validate.php" method="post">
             <input type="text" name="username" placeholder="Username"/>
             <input type="password" name="password" placeholder="Password"/>
-            <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw" data-callback="onSubmit"></div>
-            <button type="submit">Submit</button>
+            <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw"></div>
+            <br/>
+            <input type="submit" value="Submit">
         </form>
     </div>
     <p>
@@ -124,7 +125,12 @@
             }
         }
         ?>
-
     </p>
+    <script>
+        // Define the onSubmit function
+        function onSubmit(token) {
+            console.log(token)
+        }
+    </script>
 </body>
 </html>
