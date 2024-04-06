@@ -54,6 +54,12 @@
             cursor: pointer;
         }
 
+        .enabled-button:hover{
+            transform: scale(1.03);
+            background-color: lightskyblue;
+            color: black;
+        }
+
         .disabled-button{
             margin: 10px;
             padding: 10px;
@@ -61,7 +67,7 @@
             border-radius: 5px;
             width: 200px;
             width: 70%;
-            background-color: gray;
+            background-color: lightgray;
             color: black;
         }
 
