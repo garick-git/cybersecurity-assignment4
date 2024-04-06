@@ -65,18 +65,8 @@
             color: black;
         }
 
-        input:hover, button:hover{
+        input:hover{
             transform: scale(1.03);
-        }
-
-        button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
         }
     </style>
 
