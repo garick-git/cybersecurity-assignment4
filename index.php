@@ -116,24 +116,24 @@
                     // Route user based on clearance level
                     switch ($clearance) {
                         case 'C':
-                            header("Location: confidential.html");
+                            header("Location: routes/confidential.html");
                             break;
                         case 'S':
-                            header("Location: secret.html");
+                            header("Location: routes/secret.html");
                             break;
                         case 'T':
-                            header("Location: top-secret.html");
+                            header("Location: routes/top-secret.html");
                             break;
                         case 'U':
-                            header("Location: unclassified.html");
+                            header("Location: routes/unclassified.html");
                             break;
                         default:
                             // Redirect to a default page if clearance level is not recognized
-                            header("Location: default.html");
+                            header("Location: routes/default.html");
                     }
                 } else {
                     // User doesn't exist
-                    echo "false";
+                    header("Location: routes/nonexistent.html");
                 }
 
                 // Close database connection
