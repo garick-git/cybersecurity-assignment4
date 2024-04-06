@@ -90,35 +90,11 @@
         </form>
     </div>
     <p>
-    <?php
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['g-recaptcha-response'])) {
-            // Get the reCAPTCHA response token
-            $recaptchaResponse = $_POST['g-recaptcha-response'];
-
-            // Verify the reCAPTCHA response
-            $recaptchaSecretKey = "6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw";
-            $remoteIp = $_SERVER['REMOTE_ADDR'];
-            $recaptchaUrl = 'https://www.google.com/recaptcha/api/siteverify';
-            $recaptchaData = array(
-                'secret' => $recaptchaSecretKey,
-                'response' => $recaptchaResponse,
-                'remoteip' => $remoteIp
-            );
-            $recaptchaOptions = array(
-                'http' => array(
-                    'method' => 'POST',
-                    'content' => http_build_query($recaptchaData)
-                )
-            );
-            $recaptchaContext = stream_context_create($recaptchaOptions);
-            $recaptchaResult = file_get_contents($recaptchaUrl, false, $recaptchaContext);
-            $recaptchaResponseData = json_decode($recaptchaResult);
-
-            // Check if reCAPTCHA verification was successful
-            if ($recaptchaResponseData->success) {
-                // Proceed with checking user existence in the database
+        <?php
+            if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($_POST['password'])) {
+                // Get the username and password from the form submission
                 $username = $_POST["username"];
-                $password = md5($_POST["password"]);
+                $password = md5($_POST["password"]); // Hash the password using md5
 
                 // Connect to MySQL database
                 $conn = mysqli_connect("localhost", "root", "COSC4343", "cybersecurity_homework4");
@@ -127,21 +103,22 @@
                     die("Connection failed: " . mysqli_connect_error());
                 }
 
+                // Query to check if the user exists in the database
                 $sql = "SELECT * FROM UserAccounts WHERE username = '$username' AND password = '$password'";
                 $result = mysqli_query($conn, $sql);
 
+                // Check if any rows were returned
                 if (mysqli_num_rows($result) > 0) {
-                    echo "User exists: true";
+                    // User exists
+                    echo "true";
                 } else {
-                    echo "User exists: false";
+                    // User doesn't exist
+                    echo "false";
                 }
 
+                // Close database connection
                 mysqli_close($conn);
-            } else {
-                // reCAPTCHA verification failed
-                echo "reCAPTCHA verification failed.";
             }
-        }
         ?>
     </p>
     <script>
