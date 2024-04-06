@@ -129,7 +129,7 @@
     <script>
         // Define the onSubmit function
         function onSubmit(token) {
-            console.log(token)
+            console.log('form submitted ',token)
         }
     </script>
 </body>
