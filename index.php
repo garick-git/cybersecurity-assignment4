@@ -110,7 +110,27 @@
                 // Check if any rows were returned
                 if (mysqli_num_rows($result) > 0) {
                     // User exists
-                    echo "true";
+                    $row = mysqli_fetch_assoc($result);
+                    $clearance = $row['clearance'];
+
+                    // Route user based on clearance level
+                    switch ($clearance) {
+                        case 'C':
+                            header("Location: confidential.html");
+                            break;
+                        case 'S':
+                            header("Location: secret.html");
+                            break;
+                        case 'T':
+                            header("Location: top-secret.html");
+                            break;
+                        case 'U':
+                            header("Location: unclassified.html");
+                            break;
+                        default:
+                            // Redirect to a default page if clearance level is not recognized
+                            header("Location: default.html");
+                    }
                 } else {
                     // User doesn't exist
                     echo "false";
