@@ -4,10 +4,10 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
     <title>Computer Security Homework 4</title>
 </head>
 <body class="index-body">
-
     <h1>Log in</h1>
     <div class="form-container">
         <form method="post">
