@@ -80,7 +80,7 @@
             <input type="password" name="password" placeholder="Password"/>
             <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw" data-callback="displaySubmitButton"></div>
             <br/>
-            <button value="Log In" id="login-button" class="disabled-button" disabled>
+            <button value="Log In" id="login-button" class="disabled-button" disabled>Log In</button>
         </form>
     </div>
     <p>
