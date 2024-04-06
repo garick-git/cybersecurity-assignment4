@@ -1,0 +1,90 @@
+/* Style for index.php: */
+.index-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.form-container{
+    width: 25%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    width: full;
+}
+
+input {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    transition: transform 500ms;
+    width: 70%;
+}
+
+.enabled-button{
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    transition: transform 500ms;
+    width: 70%;
+    cursor: pointer;
+}
+
+.enabled-button:hover{
+    transform: scale(1.03);
+    background-color: lightskyblue;
+    color: black;
+}
+
+.disabled-button{
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    width: 70%;
+    background-color: lightgray;
+    color: black;
+}
+
+input:hover{
+    transform: scale(1.03);
+}
+
+/* Style for routes: */
+.images-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.images-container img {
+    width: 25%; /* Set each image to occupy 25% of the container width */
+    margin: 5px; /* Add some margin between the images */
+}
+
+@media (max-width: 768px) {
+    .images-container {
+        flex-direction: column; /* Change flex direction to column on smaller screens */
+        align-items: center; /* Center align images */
+    }
+
+    .images-container img {
+        width: 90%; /* Set each image to occupy 90% of the container width */
+    }
+}
