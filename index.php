@@ -63,7 +63,7 @@
 
     <h1>Log in</h1>
     <div class="form-container">
-        <form action="validate.php" method="post">
+        <form method="post">
             <input type="text" name="username" placeholder="Username"/>
             <input type="password" name="password" placeholder="Password"/>
             <div class="g-recaptcha" data-sitekey="6LcVYbEpAAAAAPlWzORSxpZ0RwuR1QJ9Gdui_vmw"></div>
